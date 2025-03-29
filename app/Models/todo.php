@@ -11,7 +11,7 @@ class todo extends Model
     /** @use HasFactory<\Database\Factories\TodoFactory> */
     use HasFactory,HasApiTokens;
 
-    /**
+    /** */
      * The attributes that are mass assignable.
      *
      * @var list<string>
