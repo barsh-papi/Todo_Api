@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\todo;
 use App\Http\Requests\StoretodoRequest;
 use App\Http\Requests\UpdatetodoRequest;
+use App\Models\todo;
+use Illuminate\Http\Request;
 
 class TodoController extends Controller
 {
@@ -13,7 +14,7 @@ class TodoController extends Controller
      */
     public function index()
     {
-        //
+        return view('todo');
     }
 
     /**
@@ -27,9 +28,31 @@ class TodoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoretodoRequest $request)
+    public function add(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title'=>'required',
+            'description'=>'required',
+            'date'=>'required',
+            'status'=>'required',
+        ]);
+        $todo = todo::create([
+            'title'=> $validated['title'],
+            'description'=> $validated['description'],
+            'date'=> $validated['date'],
+            'status'=> $validated['status'],
+            
+        ]);
+        $token = $todo->createToken('auth_token')->plainTextToken;
+        return response()->json([
+            'access_token' => $token,
+            'todo' => $todo,
+            
+        ],status: 200);
+
+        // Auth::attempt($request->only('email', 'password'));
+        // // auth()->attempt($request->only('email', 'password'));
+        // dd(auth()->user());
     }
 
     /**
